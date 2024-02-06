@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Senha Comlexa TCE-RO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #2d56ea;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        img {
+            width: 500px;
+            height: 200px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #fff;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            color: #fff;
+            margin-top: 30px;
+        }
+
+        select {
+            display: block;
+            font-size: 20px;
+            color: #0a0a0a;
+            margin-top: 30px;
+        }
+
+        #password {
+            width: 650px;
+            padding: 10px;
+            margin: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        #generate-button,
+        #clear-button,
+        #copy-button {
+            padding: 10px 40px;
+            margin: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <img src="logotcero.png" alt="Imagem" width="150">
+        <br><br>
+        <h2>Secretaria Estratégia de Tecnologia da Informação e Comunicação - SETIC</h2>
+        <br><br>
+        <h1>Gerador de Senha Complexa TCE-RO</h1>
+
+        <label for="password-length">Escolha a quantidade de caracteres:</label>
+
+        <select id="password-length">
+            <script>
+                for (var i = 10; i <= 60; i += 1) {
+                    document.write('<option value="' + i + '">' + i + '</option>');
+                }
+            </script>
+        </select>
+    </div>
+
+    <br>
+    <input type="text" id="password" readonly>
+    <br>
+    <button id="generate-button">Gerar Senha</button>
+    <button id="clear-button">Limpar</button>
+    <button id="copy-button">Copiar</button>
+
+    <script>
+        const passwordInput = document.getElementById("password");
+        const generateButton = document.getElementById("generate-button");
+        const clearButton = document.getElementById("clear-button");
+        const copyButton = document.getElementById("copy-button");
+        const passwordLengthSelect = document.getElementById("password-length");
+
+        generateButton.addEventListener("click", generatePassword);
+        clearButton.addEventListener("click", clearPassword);
+        copyButton.addEventListener("click", copyPassword);
+
+        function generatePassword() {
+            const length = parseInt(passwordLengthSelect.value);
+            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*";
+            let password = "";
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset.charAt(randomIndex);
+            }
+
+            passwordInput.value = password;
+        }
+
+        function clearPassword() {
+            passwordInput.value = "";
+        }
+
+        function copyPassword() {
+            passwordInput.select();
+            document.execCommand("copy");
+            alert("Senha copiada para a área de transferência!");
+        }
+    </script>
+</body>
+
+</html>
