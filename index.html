@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>CGS Tecnologia</title>
-    <title>Gerador de Senha Comlexa</title>
+    <title>Gerador de Senha Complexa</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,20 +19,7 @@
             margin-top: 20px;
         }
 
-        img {
-            width: 150px;
-            height: 50px;
-            margin: 0 auto;
-            display: block;
-        }
-
         h1 {
-            font-size: 20px;
-            margin-top: 10px;
-            color: #fff;
-        }
-
-        h2 {
             font-size: 20px;
             margin-top: 10px;
             color: #fff;
@@ -43,14 +29,16 @@
             display: block;
             font-size: 18px;
             color: #fff;
-            margin-top: 30px;
+            margin-top: 10px;
         }
 
-        select {
+        select,
+        input[type="number"] {
             display: block;
             font-size: 20px;
             color: #0a0a0a;
-            margin-top: 30px;
+            margin-top: 10px;
+            padding: 5px;
         }
 
         #password {
@@ -73,12 +61,10 @@
 
 <body>
     <div id="container">
-        
-        <br><br>
+        <h1>CGS Tecnologia</h1>
         <h1>Gerador de Senha Complexa</h1>
 
-        <label for="password-length">Escolha a quantidade de caracteres:</label>
-
+        <label for="password-length">Quantidade de caracteres:</label>
         <select id="password-length">
             <script>
                 for (var i = 10; i <= 60; i += 1) {
@@ -86,6 +72,22 @@
                 }
             </script>
         </select>
+
+        <label for="include-special">Incluir caracteres especiais?</label>
+        <select id="include-special">
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+        </select>
+
+        <label for="special-count">Quantidade de caracteres especiais:</label>
+        <input type="number" id="special-count" value="2" min="0">
+
+        <label for="include-upper">Incluir letras maiúsculas?</label>
+        <select id="include-upper">
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
+        </select>
+
     </div>
 
     <br>
@@ -101,6 +103,9 @@
         const clearButton = document.getElementById("clear-button");
         const copyButton = document.getElementById("copy-button");
         const passwordLengthSelect = document.getElementById("password-length");
+        const includeSpecialSelect = document.getElementById("include-special");
+        const specialCountInput = document.getElementById("special-count");
+        const includeUpperSelect = document.getElementById("include-upper");
 
         generateButton.addEventListener("click", generatePassword);
         clearButton.addEventListener("click", clearPassword);
@@ -108,13 +113,32 @@
 
         function generatePassword() {
             const length = parseInt(passwordLengthSelect.value);
-            const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let charset = "abcdefghijklmnopqrstuvwxyz0123456789";
+            if (includeUpperSelect.value === "true"){
+                charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            }
+            const specialChars = "!@#$%^&*()_+~`|}{[]\:;?><,./-=";
             let password = "";
+            let specialCount = 0;
 
-            for (let i = 0; i < length; i++) {
+            if (includeSpecialSelect.value === "true") {
+                specialCount = parseInt(specialCountInput.value);
+                if (specialCount > length){
+                    specialCount = length;
+                }
+            }
+
+            for (let i = 0; i < length - specialCount; i++) {
                 const randomIndex = Math.floor(Math.random() * charset.length);
                 password += charset.charAt(randomIndex);
             }
+
+            for (let i = 0; i < specialCount; i++) {
+                const randomIndex = Math.floor(Math.random() * specialChars.length);
+                password += specialChars.charAt(randomIndex);
+            }
+
+            password = password.split('').sort(function(){return 0.5-Math.random()}).join('');
 
             passwordInput.value = password;
         }
